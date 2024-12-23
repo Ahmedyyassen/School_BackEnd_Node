@@ -11,10 +11,10 @@ const router = express.Router();
 
 
 router.route('/').get(controler.getCourses)
-                 .post(verifyToken ,courseSchema(), controler.postCourses);
+                 .post(verifyToken, allowedTo(userRoles.ADMIN, userRoles.MANGER), courseSchema(), controler.postCourses);
 
 router.route('/:id').get(controler.getCourse)
-                   .patch(controler.updateCourse)
+                   .patch(allowedTo(userRoles.ADMIN, userRoles.MANGER),  controler.updateCourse)
                    .delete(verifyToken, allowedTo(userRoles.ADMIN, userRoles.MANGER), controler.deleteCourse)
 
 module.exports = router;

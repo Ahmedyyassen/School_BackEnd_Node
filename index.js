@@ -20,7 +20,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads') ) );
 
 
 
-mongoose.connect(url).then(()=>{
+mongoose.connect(url).then(() =>{
     console.log('Connected to MongoDB');
 })
 
@@ -29,7 +29,7 @@ app.all('*', (req, res) => {
    res.status(404).json({status: httpStatus.ERROR, message: "this resource is not available"});
 })
 
-// global error handler  ******** 3 *********
+// global error handler  **** 3 ****
 app.use((error, req, res, next)=>{
     res.status(error.statusCode || 500).json({status: error.statusText || httpStatus.ERROR, message: error.message, data: null});
 })

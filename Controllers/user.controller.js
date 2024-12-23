@@ -15,8 +15,9 @@ const getAllUsers = asyncWrapper(
 const register = asyncWrapper(
      async(req, res, next) =>{
         const {name, email, password, role} = req.body;
+       
 
-        const oldUser = await User.findOne({ email });
+        const oldUser = await User.findOne({email});
         if (oldUser) {
          const error = appError.create('user already registered', 400, httpStatus.FAIL)
          return next(error);
@@ -28,9 +29,11 @@ const register = asyncWrapper(
                 email,
                 password : hashedPassword,
                 role,
-                avatar: req.file.fileName
                 })
-            const token = await generateJWT({email: newUser.email, id: newUser._id, role: newUser.role})
+            const token = await generateJWT({email: newUser.email, id: newUser._id, role: newUser.role});
+            if(req.file){
+                newUser.avatar = req.file.filename;
+            }
             newUser.token = token;
 
             await newUser.save();
