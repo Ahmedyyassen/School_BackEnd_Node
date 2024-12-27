@@ -30,7 +30,7 @@ const register = asyncWrapper(
                 password : hashedPassword,
                 role,
                 })
-            const token = await generateJWT({email: newUser.email, id: newUser._id, role: newUser.role});
+            const token = await generateJWT({email: newUser.email, id: newUser._id, role: newUser.role}, process.env.JWT_SECRET_KEY);
             if(req.file){
                 newUser.avatar = req.file.filename;
             }
@@ -58,9 +58,8 @@ const login = asyncWrapper(
 
         const matchedPassword = await bcrypt.compare(password, user.password);
 
-        
         if (user && matchedPassword) {
-            const token = await generateJWT({email: user.email, id: user._id, roles: user.role});
+            const token = await generateJWT( {email: user.email, id: user._id, role: user.role}, process.env.JWT_SECRET_KEY );
             return res.status(200).json( { status: httpStatus.SUCCESS ,data: {token} } );
         }else{
             const error = appError.create('Invalid credentials', 500, httpStatus.FAIL);

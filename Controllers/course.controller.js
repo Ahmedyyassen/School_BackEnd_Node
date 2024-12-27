@@ -13,7 +13,7 @@ const getCourses = asyncWrapper( async (req, res) => {
 });
                     // 1
 const getCourse = asyncWrapper(
-        async (req, res) => {
+        async (req, res, next) => {
             const course = await courseModel.findById(req.params.id, {"__v": false });
             if(!course) {
                 const error = appError.create('Course not found',404,httpStatus.FAIL )
@@ -23,13 +23,13 @@ const getCourse = asyncWrapper(
     }
 )
 
-const postCourses = asyncWrapper( async (req, res) => {
+const postCourses = asyncWrapper( async (req, res, next) => {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
             const error = appError.create(errors.array(),400,httpStatus.FAIL);
              return next(error);
          }
-             const course = new courseModel(req.body);
+             const course = new courseModeerrorl(req.body);
              await course.save();
              res.status(201).json({ status: httpStatus.SUCCESS, data: {course}} );
 })
@@ -41,10 +41,11 @@ const updateCourse = asyncWrapper( async (req, res) => {
         res.status(200).json({status: httpStatus.SUCCESS, data: {updatedCourse}});
 })
 
-const deleteCourse = asyncWrapper( async (req, res) => {
+const deleteCourse = asyncWrapper( async (req, res,next) => {
         const course = await courseModel.findByIdAndDelete(req.params.id);
         if(!course){
             const error = appError.create('Course not found',404, httpStatus.FAIL )
+            return next(error);
         }
        res.status(200).json({status: httpStatus.SUCCESS, data: null});
 })

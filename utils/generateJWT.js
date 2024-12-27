@@ -1,10 +1,10 @@
-require('dotenv').config();
+require('dotenv').config()
 const jwt = require("jsonwebtoken");
 
-module.exports = async (paylod) => {
+module.exports = async (paylod, secretKey) => {
   const token = jwt.sign(
     paylod,
-    process.env.JWT_SECRET_KEY,
+    secretKey,
     { expiresIn: "10m", }
   );
   return token;

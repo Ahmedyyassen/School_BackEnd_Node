@@ -12,11 +12,10 @@ const verifyToken = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
         if (err) {
-            const error = appError.create('Invalid token', 403, httpStatus.FORBIDDEN);
+            const error = appError.create(err, 403, httpStatus.FORBIDDEN);
             return next(error);
         }
-        
-        req.currentUser = user;        
+        req.currentUser = user;      
         next();
     })
 
